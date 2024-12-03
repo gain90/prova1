@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Countdown</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: rgba(0, 0, 0, 0); /* Trasparenza */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Libre Baskerville', serif;
+    }
+
+    #countdown {
+      font-size: 10vw;
+      display: flex;
+      gap: 0.5em;
+      color: #d1d6c4;
+      text-align: center;
+    }
+
+    .time-unit {
+      width: 1em;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .highlight {
+      color: #ed5424;
+    }
+  </style>
+</head>
+<body>
+  <div id="countdown"></div>
+
+  <script>
+    const targetDate = new Date("January 1, 2025 00:00:00").getTime();
+
+    function countdown() {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+
+      if (difference < 0) {
+        document.getElementById("countdown").innerHTML = "Happy New Year!";
+        return;
+      }
+
+      const days = String(Math.floor(difference / (1000 * 60 * 60 * 24))).padStart(2, '0');
+      const hours = String(Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+      const minutes = String(Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+      const seconds = String(Math.floor((difference % (1000 * 60)) / 1000)).padStart(2, '0');
+
+      document.getElementById("countdown").innerHTML =
+        `<span class="time-unit">${days}</span> : ` +
+        `<span class="time-unit">${hours}</span> : ` +
+        `<span class="time-unit">${minutes}</span> : ` +
+        `<span class="time-unit highlight">${seconds}</span>`;
+    }
+
+    setInterval(countdown, 1000);
+    countdown();
+
+    gsap.fromTo("#countdown", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 1, ease: "power2.inOut" });
+    gsap.to(".highlight", { scale: 1.2, repeat: -1, yoyo: true, duration: 0.5 });
+  </script>
+</body>
+</html>
